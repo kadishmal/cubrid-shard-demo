@@ -1,0 +1,76 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  # Every Vagrant virtual environment requires a box to build off of.
+  #config.vm.box = "precise64"
+  config.vm.box = "centos-6.3-x64"
+
+  # The url from where the 'config.vm.box' box will be fetched if it
+  # doesn't already exist on the user's system.
+  # The following link is for "centos-6.3-x64" box.
+  config.vm.box_url = "http://sourceforge.net/projects/cubrid/files/CUBRID-Demo-Virtual-Machines/Vagrant/vagrant-virtualbox-centos-6.3-x64-minimal.box/download"
+
+  config.vm.define :node1 do |node1|
+    node1.vm.hostname = "node1"
+    node1.vm.network :private_network, ip: "10.11.12.13"
+  end
+
+  config.vm.define :node2 do |node2|
+    node2.vm.hostname = "node2"
+    node2.vm.network :private_network, ip: "10.11.12.14"
+  end
+
+  config.vm.provider :virtualbox do |v|
+    v.customize ["modifyvm", :id, "--memory", "800"]
+  end
+
+  # Set the Timezone to Asia/Seoul
+  config.vm.provision :shell, :inline => "ln -sf /usr/share/zoneinfo/Asia/Seoul /etc/localtime"
+
+  config.vm.provision :chef_solo do |chef|
+    # Fetch all cookbooks from a remote archive. This will fetch cookbooks on every Chef run.
+    chef.recipe_url = "http://sourceforge.net/projects/cubrid/files/CUBRID-Demo-Virtual-Machines/Vagrant/chef-cookbooks.tar.gz/download"
+
+    chef.json = {
+        "cubrid" => {
+            "version" => "9.1.0",
+
+            "new_dbs" => ["newtestdb"],
+
+            "ha_dbs" => ["ha_test_db"],
+            "ha_hosts" => {"node1" => "10.11.12.13", "node2" => "10.11.12.14"},
+
+            "shard_db" => "sharddb",
+            "shard_hosts" => [
+              {"node1" => "10.11.12.13"},
+              {"node2" => "10.11.12.14"}
+            ]
+        },
+        "mysql" => {
+          "server_root_password" => "password",
+          "server_repl_password" => "password",
+          "server_debian_password" => "password"
+        }
+    }
+
+    # "apt" is necessary to perform "apt-get update" command on Ubuntu OS.
+    # Comment it out if using CentOS.
+    #chef.add_recipe "apt"
+
+    #chef.add_recipe "java"
+    #chef.add_recipe "nodejs"
+
+    #chef.add_recipe "cubrid"
+    #chef.add_recipe "cubrid::demodb"
+    #chef.add_recipe "cubrid::ha"
+    #chef.add_recipe "cubrid::new_dbs"
+    #chef.add_recipe "cubrid::pdo_cubrid"
+    #chef.add_recipe "cubrid::perl_driver"
+    #chef.add_recipe "cubrid::php_driver"
+    #chef.add_recipe "cubrid::python_driver"
+    #chef.add_recipe "cubrid::shard"
+    chef.add_recipe "cubrid::shard_mysql"
+    #chef.add_recipe "cubrid::web_manager"
+  end
+end
