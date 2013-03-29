@@ -74,7 +74,7 @@ In order to run JDBC examples, we need to set `CLASSPATH` environment variable w
 
 On Mac OS X/Linux:
 
-    export CLASSPATH=/path/to/cubrid/jdbc.jar:$CLASSPATH
+    export CLASSPATH=../lib/cubrid_jdbc.jar:.
 
 On Windows:
 
