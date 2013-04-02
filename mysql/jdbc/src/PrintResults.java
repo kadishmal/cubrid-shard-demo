@@ -18,7 +18,7 @@ public class PrintResults {
 			System.out.println("Number of columns: " + numberofColumns);
 
 			for (int j = 1; j <= numberofColumns; ++j ) {
-				System.out.print(rsmd.getColumnName(j) + "(" + rsmd.getColumnTypeName(j) + "), ");
+				System.out.print(rsmd.getColumnName(j) + "(" + rsmd.getColumnTypeName(j) + ")" + (j < numberofColumns ? ", " : ""));
 			}
 
 			System.out.println("");
