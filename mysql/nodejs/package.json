@@ -1,0 +1,10 @@
+{
+  "author" : "Esen Sagynov <kadishmal@gmail.com>",
+  "engines" : {
+    "node" : "*"
+  },
+  "dependencies" : {
+    "node-cubrid": "2.0.2",
+    "async": "0.2.7"
+  }
+}

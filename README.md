@@ -66,6 +66,9 @@ Once everything is installed and configured, we need to populate all shards with
 
 Choose examples from the below list based on your favorite programming language, then run them one by one to see how CUBRID SHARD works in each case.
 
+- [JDBC](#jdbc)
+- [Node.js](#nodejs)
+
 ### JDBC
 
 #### Set classpath
@@ -74,6 +77,7 @@ In order to run JDBC examples, we need to set `CLASSPATH` environment variable w
 
 On Mac OS X/Linux:
 
+    cd jdbc/src
     export CLASSPATH=../lib/cubrid_jdbc.jar:.
 
 On Windows:
@@ -116,7 +120,7 @@ You will see something like:
     Connection is closed.
     5000 records were inserted in 6241 ms.
 
-> **Note** that you need to run the above *TwoInsertRecords* example only when the shards are empty, otherwise you will get an error because of Primary Key violation. There is a PK constraint on `post_id` column. If you need to empty shards, proceed to **Empty Shards** example below.
+> **Note** that you need to run the above *TwoInsertRecords* example **only** when the shards are empty, otherwise you will get an error because of Primary Key violation. There is a PK constraint on `post_id` column. If you need to empty shards, proceed to **Empty Shards** example below.
 
 #### Select Inserted Rows
 
@@ -129,24 +133,24 @@ Output:
 	Connected!
 	Executing: SELECT * FROM tbl_posts /*+ shard_id(0) */
 	Number of columns: 4
-	post_id(INTEGER), title(VARCHAR), content(BIT VARYING), post_date(INTEGER), 
-	1  Post 1  Post 1 content  1364550279  
-	2  Post 2  Post 2 content  1364550279  
-	3  Post 3  Post 3 content  1364550279  
-	4  Post 4  Post 4 content  1364550279  
-	5  Post 5  Post 5 content  1364550279  
+	post_id(INTEGER), title(VARCHAR), content(BIT VARYING), post_date(INTEGER)
+	1  Post 1  Post 1 content  1366008762  
+	2  Post 2  Post 2 content  1366008762  
+	3  Post 3  Post 3 content  1366008762  
+	4  Post 4  Post 4 content  1366008762  
+	5  Post 5  Post 5 content  1366008762  
 	...
-	There are 2504 rows.
+	There are 2541 rows.
 	Executing: SELECT * FROM tbl_posts /*+ shard_id(1) */
 	Number of columns: 4
-	post_id(INTEGER), title(VARCHAR), content(BIT VARYING), post_date(INTEGER), 
-	32  Post 32  Post 32 content  1364550279  
-	33  Post 33  Post 33 content  1364550279  
-	34  Post 34  Post 34 content  1364550279  
-	35  Post 35  Post 35 content  1364550279  
-	36  Post 36  Post 36 content  1364550279  
+	post_id(INTEGER), title(VARCHAR), content(BIT VARYING), post_date(INTEGER)
+	65  Post 65  Post 65 content  1366008763  
+	66  Post 66  Post 66 content  1366008763  
+	67  Post 67  Post 67 content  1366008763  
+	68  Post 68  Post 68 content  1366008763  
+	69  Post 69  Post 69 content  1366008763  
 	...
-	There are 2496 rows.
+	There are 2459 rows.
 	Connection is closed.
 
 We can notice that the data has been evenly distributed across two shards.
@@ -165,9 +169,98 @@ You will see something like:
     Connection is closed.
     2 shards were emptied in 11 ms.
 
+### Node.js
+
+#### Install dependencies
+
+This assumes you have Node.js installed on your local machine. We need to first install Node.js package dependencies.
+
+    cd nodejs
+    npm install
+
+#### Select all records from all shards
+
+    node OneSelectAll
+
+Output indicates that we have no records at this point in any shard.
+
+	Connected
+	Executing: SELECT * FROM tbl_posts /*+ shard_id(0) */
+	Number of columns: 4
+	post_id(Int), title(String), content(Varbit), post_date(Int)
+	Shard(0) holds 0 records
+	Executing: SELECT * FROM tbl_posts /*+ shard_id(1) */
+	Number of columns: 4
+	post_id(Int), title(String), content(Varbit), post_date(Int)
+	Shard(1) holds 0 records
+	Connection closed.
+
+#### Insert records
+
+Continue running the following code to populate the shards with 5,000 records.
+
+    node TwoInsertRecords
+
+You will see something like:
+
+	Connected
+	5000 records were inserted in 37178 ms.
+	Connection closed.
+
+> **Note** that you need to run the above *TwoInsertRecords* example **only** when the shards are empty, otherwise you will get an error because of Primary Key violation. There is a PK constraint on `post_id` column. If you need to empty shards, proceed to **Empty Shards** example below.
+
+#### Select Inserted Rows
+
+Since we have inserted relatively small number of records, we are fine with selecting all records from all shards. For this we will execute the very first example again.
+
+	node OneSelectAll
+
+Output:
+
+	Connected
+	Executing: SELECT * FROM tbl_posts /*+ shard_id(0) */
+	Number of columns: 4
+	post_id(Int), title(String), content(Varbit), post_date(Int)
+	1 Post 1 Post 1 content 1366008762 
+	2 Post 2 Post 2 content 1366008762 
+	3 Post 3 Post 3 content 1366008762 
+	4 Post 4 Post 4 content 1366008762 
+	5 Post 5 Post 5 content 1366008762 
+	...
+	Shard(0) holds 2541 records
+	Executing: SELECT * FROM tbl_posts /*+ shard_id(1) */
+	Number of columns: 4
+	post_id(Int), title(String), content(Varbit), post_date(Int)
+	65 Post 65 Post 65 content 1366008763 
+	66 Post 66 Post 66 content 1366008763 
+	67 Post 67 Post 67 content 1366008763 
+	68 Post 68 Post 68 content 1366008763 
+	69 Post 69 Post 69 content 1366008763 
+	...
+	Shard(1) holds 2459 records
+	Connection closed.
+
+We can notice that the data has been evenly distributed across two shards.
+
+#### Empty Shards
+
+To delete all records from all shards, run the following example.
+
+	node ThreeEmptyShards
+
+You will see something like:
+
+	Connected
+	Executing: DELETE FROM tbl_posts /*+ shard_id(0) */
+	Executing: DELETE FROM tbl_posts /*+ shard_id(1) */
+	2 shards were emptied in 1007 ms.
+	Connection closed.
+
+
+
 ## What's next
 
-At this moment I have plans to add more examples in other programming languages like Node.js, PHP, Python, etc.
+At this moment I have plans to add more examples in other programming languages like PHP, Python, etc.
 
 ### Contribute
 
@@ -175,6 +268,6 @@ If you want to contribute, fork this repo and send a pull request with your exam
 
 ## License
 
- ([The MIT license](https://github.com/CUBRID/cubrid-shard-demo/blob/master/LICENSE.md))
+Distributed under  ([MIT license](https://github.com/CUBRID/cubrid-shard-demo/blob/master/LICENSE.md)).
  
 Copyright (c) 2013 Esen Sagynov <kadishmal@gmail.com>
