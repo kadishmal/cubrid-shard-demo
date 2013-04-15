@@ -22,7 +22,7 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.provider :virtualbox do |v|
-    v.customize ["modifyvm", :id, "--memory", "800"]
+    v.customize ["modifyvm", :id, "--memory", "500"]
   end
 
   # Set the Timezone to Asia/Seoul
@@ -31,6 +31,8 @@ Vagrant.configure("2") do |config|
   config.vm.provision :chef_solo do |chef|
     # Fetch all cookbooks from a remote archive. This will fetch cookbooks on every Chef run.
     chef.recipe_url = "http://sourceforge.net/projects/cubrid/files/CUBRID-Demo-Virtual-Machines/Vagrant/chef-cookbooks.tar.gz/download"
+
+    #chef.cookbooks_path = "cookbooks"
 
     chef.json = {
         "cubrid" => {
