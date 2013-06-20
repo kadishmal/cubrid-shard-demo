@@ -2,6 +2,11 @@
 
 This file is used to list changes made in each version of this cubrid-shard-demo repository.
 
+## 1.1.1
+
+- New: added PHP examples.
+- Ref: ignore `.idea` directories.
+
 ## 1.1.0
 
 - New: added Node.js examples.
