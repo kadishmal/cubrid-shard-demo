@@ -47,10 +47,10 @@ catch(PDOException $E)
 
 $end_time = microtime(true);
 
-echo "5000 records were inserted in " . round(($end_time - $start_time) * 1000) . " ms.\n";
+echo "5000 records were inserted in " . round(($end_time - $start_time) * 1000) . " ms." . PHP_EOL;
 
 $conn = null;
 
-echo "Connection is closed.\n";
+echo "Connection is closed." . PHP_EOL;
 
 

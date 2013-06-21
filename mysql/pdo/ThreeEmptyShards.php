@@ -10,7 +10,7 @@ try
 	{
 		$sql = "DELETE FROM tbl_posts /*+ shard_id(" . $i . ") */";
 
-		echo "Executing: " . $sql . "\n";
+		echo "Executing: " . $sql . PHP_EOL;
 
 		$conn->query($sql);
 	}
@@ -22,8 +22,8 @@ catch(PDOException $E)
 
 $end_time = microtime(true);
 
-echo $shards_count . " shards were emptied in " . round(($end_time - $start_time) * 1000) . " ms.\n";
+echo $shards_count . " shards were emptied in " . round(($end_time - $start_time) * 1000) . " ms." . PHP_EOL;
 
 $conn = null;
 
-echo "Connection is closed.\n";
+echo "Connection is closed." . PHP_EOL;

@@ -8,7 +8,7 @@ try
 	{
 		$sql = "SELECT * FROM tbl_posts /*+ shard_id(" . $i . ") */";
 
-		echo "Executing: " . $sql . "\n";
+		echo "Executing: " . $sql . PHP_EOL;
 
 		$req  = $conn->query($sql);
 
@@ -18,7 +18,7 @@ try
 		$columns         = array();
 		$column_metadata = array();
 
-		echo "Number of columns: " . $cols . "\n";
+		echo "Number of columns: " . $cols . PHP_EOL;
 
 		for($j = 0; $j < $cols; ++$j)
 		{
@@ -28,11 +28,9 @@ try
 
 		}
 
-		echo join(", ", $columns) . "\n";
+		echo join(", ", $columns) . PHP_EOL;
 
-		$fetchRows = $req->fetchAll();
-
-		foreach ($fetchRows as $row)
+		foreach ($req->fetchAll() as $row)
 		{
 			for($j = 0; $j < $cols; ++$j)
 			{
@@ -68,4 +66,4 @@ catch(PDOException $E)
 
 $conn = null;
 
-echo "Connection is closed.\n";
+echo "Connection is closed." . PHP_EOL;
