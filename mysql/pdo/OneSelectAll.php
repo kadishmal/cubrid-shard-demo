@@ -25,7 +25,6 @@ try
 			$column_metadata[$j] = $req->getColumnMeta($j);
 
 			$columns[] = $column_metadata[$j]['name'] . "(" . $column_metadata[$j]['type'] . ")";
-
 		}
 
 		echo join(", ", $columns) . PHP_EOL;
