@@ -1,7 +1,7 @@
 <?php
 
 include_once __DIR__ . '/../shard_connection.php';
-include_once __DIR__ . '/../ExampleStatementClass.php';
+include_once __DIR__ . '/ExampleStatementClass.php';
 
 try
 {
