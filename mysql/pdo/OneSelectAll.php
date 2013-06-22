@@ -55,7 +55,6 @@ try
 
 		echo "Shard(" . $i . ") holds " . $rows . " records." . PHP_EOL;
 
-		$req->closeCursor();
 	}
 }
 catch(PDOException $E)
