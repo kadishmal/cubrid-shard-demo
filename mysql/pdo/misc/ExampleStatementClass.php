@@ -1,7 +1,5 @@
 <?php
 
-include_once 'shard_connection.php';
-
 class ExampleStatementClass extends PDOStatement
 {
 	public function fetchAll()
@@ -35,28 +33,4 @@ class ExampleStatementClass extends PDOStatement
 
 		return $result;
 	}
-}
-
-
-try
-{
-	$conn->setAttribute(PDO::ATTR_STATEMENT_CLASS, array("ExampleStatementClass"));
-
-	for ($i = 0; $i < $shards_count; ++$i)
-	{
-		$sql = "SELECT * FROM tbl_posts /*+ shard_id(" . $i . ") */";
-
-		echo "Executing: " . $sql . PHP_EOL;
-
-		$req  = $conn->query($sql);
-
-		foreach ($req->fetchAll() as $row)
-		{
-			var_dump($row);
-		}
-	}
-}
-catch(PDOException $E)
-{
-	exit('Failed: (' . $E->getCode() . ')' . $E->getMessage());
 }
