@@ -27,13 +27,14 @@ try
 		// So, make sure the `shard_key` column value type is correctly set
 		// during binding process.
 
-		$text_string = "Post :" . $i;
+		$text_title   = "Post " . $i;
+		$text_content = "Post " . $i . " content";
 
 		$stmt->bindParam(1, $i, PDO::PARAM_INT);
 
-		$stmt->bindParam(2, $text_string, PDO::PARAM_STR);
+		$stmt->bindParam(2, $text_title, PDO::PARAM_STR);
 
-		$stmt->bindParam(3, $text_string, PDO::PARAM_STR);
+		$stmt->bindParam(3, $text_content, PDO::PARAM_STR);
 
 		$stmt->bindParam(4, mktime(), PDO::PARAM_INT);
 

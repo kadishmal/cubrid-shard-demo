@@ -1,6 +1,6 @@
 <?php
 
-class ExampleStatementClass extends PDOStatement
+class OverriddenPDOStatement extends PDOStatement
 {
 	public function fetchAll()
 	{
