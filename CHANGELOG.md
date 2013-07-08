@@ -2,6 +2,10 @@
 
 This file is used to list changes made in each version of this cubrid-shard-demo repository.
 
+## 1.1.2
+
+- New: added PDO examples.
+
 ## 1.1.1
 
 - New: added PHP examples.
